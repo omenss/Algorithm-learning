@@ -1,19 +1,12 @@
 ## 算法题
 
- * [合并两个有序链表](#ListNodeMerge)
- * 二叉树遍历
-
-
-
-
-
-
-
-
-
+* [合并两个有序链表](#ListNodeMerge)
+* [无重复字符的最长子串](#lengthOfLongestSubstring)
 
 ### <a id="ListNodeMerge">合并两个有序链表</a>
+
 #### 题目描述：
+
 > 1. 合并两个有序链表
 > 2. 合并K个有序链表
 > 3. 合并两个有序数组
@@ -101,10 +94,60 @@ public class Solution {
 
 ```
 
+### <a id="lengthOfLongestSubstring">无重复字符的最长子串</a>
 
+#### 题目描述：
 
+给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
 
+示例 1:
+输入: s = "abcabcbb" 输出: 3 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。 示例 2:
+输入: s = "bbbbb" 输出: 1 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。 示例 3:
+输入: s = "pwwkew" 输出: 3 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。 请注意，你的答案必须是 子串 的长度，"
+pwke" 是一个子序列，不是子串。
 
+提示：
+0 <= s.length <= 5 * 104 s 由英文字母、数字、符号和空格组成
 
-###  二叉树遍历
+### 解题思路：
+
+滑动窗口法 采用hashmap来存储字符和字符的下标 用来判断是否有重复的字符 HashMap<Character, Integer> window = new
+HashMap<>();
+定义初始窗口下表 left=0; right=0;
+遍历字符串s
+
+- 如果map中包含当前字符 那么左边窗口就要向右滑动一格 left = Math.max(left, window.get(s.charAt(i)) + 1);
+- 如果map中不包含当前字符 那么就将当前字符和下标放入map中 window.put(s.charAt(i), i); 右边窗口向右滑动一格 right =
+  Math.max(right, i - left + 1);
+- 在遍历完之后 right就是最长的子串的长度
+
+### 无重复字符的最长子串
+
 ```java
+public class Solution {
+
+    /**
+     * 滑动窗口模式
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() <= 1) {
+            return s.length();
+        }
+        HashMap<Character, Integer> window = new HashMap<>();
+        int left = 0, right = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (window.containsKey(s.charAt(i))) {
+                left = Math.max(left, window.get(s.charAt(i)) + 1);
+            }
+            window.put(s.charAt(i), i);
+            right = Math.max(right, i - left + 1);
+        }
+        return right;
+    }
+
+}
+
+```
